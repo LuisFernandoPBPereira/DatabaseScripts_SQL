@@ -5,6 +5,9 @@
 #PROPRIEDADE QUE PEGA A DATA ATUAL DO SERVIDOR
 
 SELECT curdate();
+#==============================================  CURTIME()
+
+SELECT curtime();
 
 #=============================================== NOW()
 
