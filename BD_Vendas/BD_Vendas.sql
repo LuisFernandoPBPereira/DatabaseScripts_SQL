@@ -246,3 +246,27 @@ CREATE VIEW vw_exercicioD as
 	   FROM tbl_itempedido i, tbl_produto pr
        WHERE i.i_cod_produto = pr.cod_produto;
 SELECT * FROM vw_exercicioD;
+
+
+
+CREATE TABLE tbl_log(
+	id_log int not null auto_increment primary key,
+    usuario varchar(50) not null,
+    dt_log date not null,
+    hora time not null,
+    tipo_operacao varchar(15),
+    comando text
+);
+
+delimiter $
+CREATE TRIGGER trg_log BEFORE DELETE
+ON tbl_cliente
+FOR EACH ROW
+BEGIN
+	INSERT INTO tbl_log
+			(usuario, dt_log, hora)
+	VALUES(user(), curdate(), curtime());
+end $
+
+DELETE FROM tbl_cliente WHERE cod_cliente = 19;
+
