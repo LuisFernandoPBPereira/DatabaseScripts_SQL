@@ -1,4 +1,4 @@
-CREATE DATABASE bd_vendas;
+create DATABASE bd_vendas;
 USE bd_vendas;
 
 CREATE TABLE tbl_produto(
@@ -58,6 +58,16 @@ CREATE TABLE tbl_itempedido(
 		foreign key (i_cod_produto)
         references tbl_produto(cod_produto)
 );
+
+CREATE TABLE tbl_log(
+	id_log int not null auto_increment primary key,
+    usuario varchar(50) not null,
+    dt_log date not null,
+    hora time not null,
+    tipo_operacao varchar(15),
+    comando text
+);
+
 
 INSERT INTO tbl_produto(nome_produto, desc_produto, unid_medida,
 estoque_atual, estoque_min, estoque_max, valor)VALUES
@@ -188,7 +198,7 @@ SELECT * FROM vw_vendatotal;
 #=================================== EXERCÍCIOS =====================================
 
 ##====================== EXERCÍCIO A
-CREATE VIEW vw_exercicioA as
+/*CREATE VIEW vw_exercicioA as
 	SELECT c.cod_cliente as codigo, 
 		   c.nome_cliente as nome,
            p.cod_pedido as pedido,
@@ -246,18 +256,12 @@ CREATE VIEW vw_exercicioD as
 	   FROM tbl_itempedido i, tbl_produto pr
        WHERE i.i_cod_produto = pr.cod_produto;
 SELECT * FROM vw_exercicioD;
+*/
 
 
 
-CREATE TABLE tbl_log(
-	id_log int not null auto_increment primary key,
-    usuario varchar(50) not null,
-    dt_log date not null,
-    hora time not null,
-    tipo_operacao varchar(15),
-    comando text
-);
 
+#============================================================
 delimiter $
 CREATE TRIGGER trg_log BEFORE DELETE
 ON tbl_cliente
@@ -267,6 +271,52 @@ BEGIN
 			(usuario, dt_log, hora)
 	VALUES(user(), curdate(), curtime());
 end $
+delimiter $;
+#============================================================
 
-DELETE FROM tbl_cliente WHERE cod_cliente = 19;
+#===============================================EXERCÍCIO B - TRIGGER
+delimiter $
+CREATE TRIGGER trg_log_pedido BEFORE UPDATE
+ON tbl_pedido
+FOR EACH ROW
+BEGIN
+	INSERT INTO tbl_log
+			(usuario, dt_log, hora, tipo_operacao, comando)
+	VALUES(user(), curdate(), curtime(), "UPDATE", "tbl_pedido");
+end $
+delimiter $;
+
+UPDATE tbl_pedido SET data_entrega = "2022-02-19" WHERE cod_pedido = 5;
+#===========================================================================
+
+#==========================================================EXERCÍCIO C - TRIGGER
+delimiter $
+CREATE TRIGGER trg_log_produto BEFORE DELETE
+ON tbl_produto
+FOR EACH ROW
+BEGIN
+	INSERT INTO tbl_log
+			(usuario, dt_log, hora, tipo_operacao, comando)
+	VALUES(user(), curdate(), curtime(), "DELETE", "tbl_produto");
+end $
+delimiter $;
+
+DELETE FROM tbl_produto WHERE cod_produto = 8;
+#======================================================================
+
+#========================================EXERCÍCIO D - TRIGGER
+delimiter $
+CREATE TRIGGER trg_log_cliente AFTER INSERT
+ON tbl_cliente
+FOR EACH ROW
+BEGIN
+	INSERT INTO tbl_log
+			(usuario, dt_log, hora, tipo_operacao, comando)
+	VALUES(user(), curdate(), curtime(), "INSERT", "tbl_cliente");
+end $
+delimiter $;
+
+INSERT INTO tbl_cliente(nome_cliente, cpf, data_nasc, cep, numero, complemento)
+					VALUES("PUDIM_GOSTOSO", "09256794233", "2004-10-20", 6803070, "500", "");
+
 
