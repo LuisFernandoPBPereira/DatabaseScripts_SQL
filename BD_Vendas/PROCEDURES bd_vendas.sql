@@ -42,7 +42,7 @@ CREATE PROCEDURE prc_prod_param_inout( IN codprod int, INOUT nome_prod char(15),
 	END $
 delimiter ;
 
-call prc_prod_param_inout(10, @nomeprod, @valorprod)
+call prc_prod_param_inout(10, @nomeprod, @valorprod);
 #====================================================================
 
 delimiter $

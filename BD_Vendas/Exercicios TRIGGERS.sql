@@ -53,5 +53,6 @@ BEGIN
 end $
 delimiter $;
 
-INSERT INTO tbl_cliente(nome_cliente, cpf, data_nasc, cep, numero, complemento)
-					VALUES("PUDIM_GOSTOSO", "09256794233", "2004-10-20", 6803070, "500", "");
+#INSERT INTO tbl_cliente(nome_cliente, cpf, data_nasc, cep, numero, complemento)
+#					VALUES("PUDIM_GOSTOSO", "09256794233", "2004-10-20", 6803070, "500"); 
+                    
