@@ -5,7 +5,7 @@
 e colocá-lo um percentual de 50% de acréscimo em seu valor,
 além de printar uma mensagem de êxito ou erro.*/
 
-/*delimiter $
+delimiter $
 CREATE PROCEDURE prc_prod_calc_perc( IN codprod int, IN perc_prod decimal(10, 2),
 									OUT msg varchar(100))
 	BEGIN
@@ -35,7 +35,7 @@ delimiter ;
 
 call prc_prod_calc_perc(2, 0.50, @msg);
 SELECT @msg;
-*/
+
 #======================================== EXERCÍCIO - B e C
 SELECT * FROM tbl_cliente;
 SELECT * FROM tbl_log;
